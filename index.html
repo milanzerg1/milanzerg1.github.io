@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Наша история 💖</title>
+
+    <!-- Красивые шрифты -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <!-- AOS — анимации при скролле -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --pink: #ff4d6d;
+            --pink-light: #ffb3c1;
+            --gold: #d4af37;
+            --dark: #1a0a1f;
+            --dark-light: #2d1b33;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #1a0a1f 0%, #2d1b33 50%, #1a0a1f 100%);
+            color: #f5e6ff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Звёзды на фоне */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* Общие секции */
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 80px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ======================= */
+        /* HERO — первая страница */
+        /* ======================= */
+        .hero {
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            font-weight: 300;
+            background: linear-gradient(135deg, #ff4d6d, #ffb3c1, #d4af37);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .hero .subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
+            color: var(--pink-light);
+            margin-bottom: 40px;
+            font-weight: 300;
+            opacity: 0;
+            animation: fadeIn 2s 1s forwards;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--pink-light);
+            font-size: 0.9rem;
+            opacity: 0;
+            animation: fadeIn 2s 2s forwards, bounce 2s infinite 3s;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        /* ======================= */
+        /* TIMELINE — этапы */
+        /* ======================= */
+        .timeline-section {
+            padding: 100px 20px;
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            color: var(--gold);
+            margin-bottom: 60px;
+            text-align: center;
+            letter-spacing: 3px;
+        }
+
+        .section-date {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--pink-light);
+            letter-spacing: 4px;
+            margin-bottom: 15px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+        }
+
+        .story-block {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            margin-bottom: 120px;
+        }
+
+        .story-block.reverse {
+            direction: rtl;
+        }
+
+        .story-block.reverse > * {
+            direction: ltr;
+        }
+
+        .story-image {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 20px 60px rgba(255, 77, 109, 0.3);
+            aspect-ratio: 4/5;
+        }
+
+        .story-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+
+        .story-image:hover img {
+            transform: scale(1.05);
+        }
+
+        .story-image::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent, rgba(255, 77, 109, 0.2));
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .story-text h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            color: #fff;
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+
+        .story-text p {
+            font-size: clamp(1rem, 2vw, 1.15rem);
+            line-height: 1.8;
+            color: #e6d5f5;
+            font-weight: 300;
+            margin-bottom: 15px;
+        }
+
+        .story-text .highlight {
+            color: var(--pink-light);
+            font-style: italic;
+        }
+
+        /* ======================= */
+        /* ПРЕДЛОЖЕНИЕ — главное! */
+        /* ======================= */
+        .proposal {
+            background: radial-gradient(ellipse at center, rgba(255, 77, 109, 0.2) 0%, transparent 70%);
+        }
+
+        .video-container {
+            width: 100%;
+            max-width: 900px;
+            aspect-ratio: 16/9;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(255, 77, 109, 0.5);
+            margin-bottom: 40px;
+            border: 2px solid var(--gold);
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .proposal-text {
+            text-align: center;
+            max-width: 700px;
+        }
+
+        .proposal-text h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            color: var(--gold);
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+
+        .proposal-text p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #fff;
+            font-weight: 300;
+        }
+
+        .big-heart {
+            font-size: 4rem;
+            display: inline-block;
+            animation: heartbeat 1.5s infinite;
+            margin: 20px 0;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.15); }
+        }
+
+        /* ======================= */
+        /* БУДУЩЕЕ */
+        /* ======================= */
+        .future {
+            text-align: center;
+        }
+
+        .countdown {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 40px 0;
+        }
+
+        .count-item {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 12px;
+            padding: 30px 25px;
+            min-width: 120px;
+        }
+
+        .count-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5rem;
+            font-weight: 500;
+            color: var(--gold);
+            line-height: 1;
+        }
+
+        .count-label {
+            font-size: 0.85rem;
+            color: var(--pink-light);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 10px;
+        }
+
+        .love-button {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 18px 50px;
+            background: linear-gradient(135deg, var(--pink), #c73659);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255, 77, 109, 0.4);
+            transition: all 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .love-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 77, 109, 0.6);
+        }
+
+        .final-message {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.5rem, 7vw, 5rem);
+            background: linear-gradient(135deg, #ff4d6d, #d4af37);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-top: 60px;
+            font-weight: 300;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .final-message.show {
+            opacity: 1;
+        }
+
+        /* Падающие сердечки */
+        .falling-heart {
+            position: fixed;
+            color: var(--pink);
+            font-size: 2rem;
+            pointer-events: none;
+            z-index: 9999;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Мобильная адаптация */
+        @media (max-width: 768px) {
+            .story-block, .story-block.reverse {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                direction: ltr;
+            }
+            .story-image {
+                aspect-ratio: 1/1;
+            }
+            .count-item {
+                padding: 20px 15px;
+                min-width: 90px;
+            }
+            .count-number {
+                font-size: 2.5rem;
+            }
+        }
+
+        /* ========================= */
+        /* СЛАЙДШОУ ПРЕДЛОЖЕНИЯ      */
+        /* ========================= */
+        .slideshow-container {
+            width: 100%;
+            max-width: 900px;
+            aspect-ratio: 12/8;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(255, 77, 109, 0.5);
+            margin: 0 auto 40px;
+            border: 2px solid var(--gold);
+            position: relative;
+            background: var(--dark);
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Показывает фото целиком без обрезки */
+            animation: zoomSlow 15s ease-in-out infinite alternate;
+            padding: 20px; /* Отступы по краям */
+        }
+
+        /* Добавь красивый фон для контейнера */
+        .slideshow-container {
+            background: 
+                radial-gradient(ellipse at center, rgba(212, 175, 55, 0.1) 0%, transparent 70%),
+                linear-gradient(135deg, #1a0a1f 0%, #2d1b33 100%);
+        }
+
+        /* Медленный зум для кинематографичности */
+        @keyframes zoomSlow {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+
+        /* Точки навигации */
+        .dots-container {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            padding: 10px 20px;
+            border-radius: 50px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .dot:hover {
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .dot.active {
+            background: var(--gold);
+            border-color: #fff;
+            transform: scale(1.3);
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Звёзды на фоне -->
+    <div class="stars" id="stars"></div>
+
+    <!-- ========================= -->
+    <!-- СЕКЦИЯ 1: ПРИВЕТСТВИЕ     -->
+    <!-- ========================= -->
+    <section class="hero">
+        <h1 data-aos="fade-down" data-aos-duration="1500">
+            Для моей Ангелинки
+        </h1>
+        <p class="subtitle" data-aos="fade-up" data-aos-delay="500">
+            История, которую я хочу рассказать тебе снова
+        </p>
+        <div class="scroll-hint">
+            ✨ Листай вниз ✨
+        </div>
+    </section>
+
+    <!-- ========================= -->
+    <!-- СЕКЦИЯ 2: ЗНАКОМСТВО      -->
+    <!-- ========================= -->
+    <section class="timeline-section">
+        <div class="section-title" data-aos="fade-up">
+            <span class="section-date">ГЛАВА ПЕРВАЯ</span>
+            Как всё начиналось
+        </div>
+
+        <div class="story-block">
+            <div class="story-image" data-aos="fade-right">
+                <img src="media/us1.jpg" alt="Наше знакомство">
+            </div>
+            <div class="story-text" data-aos="fade-left">
+                <h3>Первая встреча</h3>
+                <p>
+                    Помнишь тот день? Я до сих пор помню, как мы обнялись возле библиотеки, 
+                    и всё вокруг будто перестало существовать. Мы гуляли буквально вечность..
+                </p>
+                <p class="highlight">
+                    «Иногда одна встреча меняет всю жизнь»
+                </p>
+            </div>
+        </div>
+
+        <div class="story-block reverse">
+            <div class="story-image" data-aos="fade-left">
+                <img src="media/us2.jpg" alt="Первые свидания">
+            </div>
+            <div class="story-text" data-aos="fade-right">
+                <h3>Первые свидания</h3>
+                <p>
+                    Долгие прогулки, переписки до рассвета, смех, от которого сводило скулы.
+                    Каждая встреча была маленькой вечностью. Я влюблялся в тебя всё сильнее
+                    с каждым днём.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================= -->
+    <!-- СЕКЦИЯ 3: АРМИЯ           -->
+    <!-- ========================= -->
+    <section class="timeline-section">
+        <div class="section-title" data-aos="fade-up">
+            <span class="section-date">ГЛАВА ВТОРАЯ</span>
+            Разлука, которая сделала нас сильнее
+        </div>
+
+        <div class="story-block">
+            <div class="story-image" data-aos="fade-right">
+                <img src="media/army1.jpg" alt="Армия">
+            </div>
+            <div class="story-text" data-aos="fade-left">
+                <h3>Полтора года</h3>
+                <p>
+                    Армия была испытанием. Каждое твоё сообщение, каждый звонок — как глоток
+                    воздуха. Я считал дни до дембеля, и только мысли о тебе помогали
+                    держаться. Ты была моей силой, моей надеждой, моей причиной идти дальше.
+                </p>
+                <p class="highlight">
+                    «547 дней без тебя = 547 дней любви к тебе»
+                </p>
+            </div>
+        </div>
+
+        <div class="story-block reverse">
+            <div class="story-image" data-aos="fade-left">
+                <img src="media/army2.jpg" alt="Письма и ожидание">
+            </div>
+            <div class="story-text" data-aos="fade-right">
+                <h3>Твоя вера</h3>
+                <p>
+                    Ты ждала меня так, как умеешь только ты — верно, сильно, без сомнений.
+                    И я дал себе слово: когда вернусь, я сделаю всё, чтобы ты была самой
+                    счастливой.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================= -->
+    <!-- СЕКЦИЯ 4: ПРЕДЛОЖЕНИЕ     -->
+    <!-- ========================= -->
+    <section class="timeline-section proposal">
+        <div class="section-title" data-aos="fade-up">
+            <span class="section-date">ГЛАВА ТРЕТЬЯ</span>
+            Тот самый день
+        </div>
+
+        <div class="slideshow-container" data-aos="zoom-in" data-aos-duration="1200">
+            <div class="slide fade active">
+                <img src="media/proposal1.jpg">
+            </div>
+            <div class="slide fade">
+                <img src="media/proposal2.jpg">
+            </div>
+            <div class="slide fade">
+                <img src="media/proposal3.jpg">
+            </div>
+            <div class="slide fade">
+                <img src="media/proposal4.jpg">
+            </div>
+            <div class="slide fade active">
+                <img src="media/proposal5.jpg">
+            </div>
+            <div class="slide fade">
+                <img src="media/proposal6.jpg">
+            </div>
+            <div class="slide fade">
+                <img src="media/proposal7.jpg">
+            </div>
+            <div class="slide fade">
+                <img src="media/proposal8.jpg">
+            </div>
+            <div class="slide fade active">
+                <img src="media/proposal9.jpg">
+            </div>
+            <div class="slide fade">
+                <img src="media/proposal10.jpg">
+            </div>
+            <div class="slide fade">
+                <img src="media/proposal11.jpg">
+            </div>
+            <div class="slide fade">
+                <img src="media/proposal12.jpg">
+            </div>
+            <div class="slide fade active">
+                <img src="media/proposal13.jpg">
+            </div>
+            <div class="slide fade">
+                <img src="media/proposal14.jpg">
+            </div>
+
+            <!-- Точки навигации -->
+            <div class="dots-container">
+                <span class="dot active" onclick="currentSlide(1)"></span>
+                <span class="dot" onclick="currentSlide(2)"></span>
+                <span class="dot" onclick="currentSlide(3)"></span>
+                <span class="dot" onclick="currentSlide(4)"></span>
+                <span class="dot" onclick="currentSlide(5)"></span>
+                <span class="dot" onclick="currentSlide(6)"></span>
+                <span class="dot" onclick="currentSlide(7)"></span>
+                <span class="dot" onclick="currentSlide(8)"></span>
+                <span class="dot" onclick="currentSlide(9)"></span>
+                <span class="dot" onclick="currentSlide(10)"></span>
+                <span class="dot" onclick="currentSlide(11)"></span>
+                <span class="dot" onclick="currentSlide(12)"></span>
+                <span class="dot" onclick="currentSlide(13)"></span>
+                <span class="dot" onclick="currentSlide(14)"></span>
+            </div>
+        </div>
+
+        <div class="proposal-text" data-aos="fade-up">
+            <div class="big-heart">💍</div>
+            <h2>Я встал на колено</h2>
+            <p>
+                Дембель. Волнение. Долгожданная встреча. Ты такая красивая в прекрасном образе..
+                Но когда я встал на колено, весь мир исчез. Осталась только ты, твои глаза
+                и единственный вопрос, который я хотел задать всю жизнь с момента нашей встречи...
+            </p>
+            <p class="highlight" style="font-size: 1.4rem; margin-top: 20px;">
+                «Ты сказала ДА. И это был лучший момент моей жизни» 💖
+            </p>
+        </div>
+    </section>
+
+    <!-- ========================= -->
+    <!-- СЕКЦИЯ 5: БУДУЩЕЕ         -->
+    <!-- ========================= -->
+    <section class="timeline-section future">
+        <div class="section-title" data-aos="fade-up">
+            <span class="section-date">НОВАЯ ГЛАВА</span>
+            Впереди целая жизнь
+        </div>
+
+        <p data-aos="fade-up" data-aos-delay="200" style="font-size: 1.3rem; max-width: 700px; margin: 0 auto 40px;">
+            До нашей свадьбы осталось совсем немного...
+        </p>
+
+        <div class="countdown" data-aos="zoom-in" data-aos-delay="400">
+            <div class="count-item">
+                <div class="count-number" id="days">0</div>
+                <div class="count-label">дней</div>
+            </div>
+            <div class="count-item">
+                <div class="count-number" id="hours">0</div>
+                <div class="count-label">часов</div>
+            </div>
+            <div class="count-item">
+                <div class="count-number" id="minutes">0</div>
+                <div class="count-label">минут</div>
+            </div>
+            <div class="count-item">
+                <div class="count-number" id="seconds">0</div>
+                <div class="count-label">секунд</div>
+            </div>
+        </div>
+
+        <button class="love-button" data-aos="fade-up" data-aos-delay="600" onclick="showLove()">
+            НАЖМИ ❤️
+        </button>
+
+        <h2 class="final-message" id="finalMessage">
+            Я люблю тебя 💕
+        </h2>
+    </section>
+
+    <!-- Скрипты -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Инициализация анимаций при скролле
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // ✨ Звёзды на фоне
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 150; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                const size = Math.random() * 2 + 1;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+        createStars();
+
+        // ⏰ Таймер до свадьбы
+        const weddingDate = new Date('2027-06-13T12:00:00').getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+
+            if (distance < 0) {
+                document.getElementById('days').textContent = '🎉';
+                document.getElementById('hours').textContent = '👰';
+                document.getElementById('minutes').textContent = '🤵';
+                document.getElementById('seconds').textContent = '💍';
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = days;
+            document.getElementById('hours').textContent = hours;
+            document.getElementById('minutes').textContent = minutes;
+            document.getElementById('seconds').textContent = seconds;
+        }
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        // 💖 Кнопка "НАЖМИ" — салют из сердечек
+        function showLove() {
+            const message = document.getElementById('finalMessage');
+            message.classList.add('show');
+
+            // Создаём 100 падающих сердечек
+            const hearts = ['❤️', '💖', '💕', '💗', '💓', '💝', '🌹'];
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'falling-heart';
+                    heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.top = '-50px';
+                    heart.style.fontSize = (Math.random() * 2 + 1) + 'rem';
+                    heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    document.body.appendChild(heart);
+
+                    // Удаляем после анимации
+                    setTimeout(() => heart.remove(), 5000);
+                }, i * 50);
+            }
+        }
+
+        // Дополнительный эффект: при клике в любом месте — сердечко
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('love-button')) return;
+            const heart = document.createElement('div');
+            heart.textContent = '❤️';
+            heart.style.position = 'fixed';
+            heart.style.left = e.clientX + 'px';
+            heart.style.top = e.clientY + 'px';
+            heart.style.pointerEvents = 'none';
+            heart.style.fontSize = '2rem';
+            heart.style.zIndex = '9999';
+            heart.style.transition = 'all 1s ease-out';
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.style.transform = 'translateY(-100px) scale(0)';
+                heart.style.opacity = '0';
+            }, 10);
+
+            setTimeout(() => heart.remove(), 1000);
+        });
+
+                // ================================
+        // СЛАЙДШОУ — автопереключение
+        // ================================
+        let slideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        let slideshowInterval;
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+
+            if (n >= slides.length) slideIndex = 0;
+            if (n < 0) slideIndex = slides.length - 1;
+
+            slides[slideIndex].classList.add('active');
+            dots[slideIndex].classList.add('active');
+        }
+
+        function nextSlide() {
+            slideIndex++;
+            showSlide(slideIndex);
+        }
+
+        function currentSlide(n) {
+            slideIndex = n - 1;
+            showSlide(slideIndex);
+            // Сброс автопереключения при ручном клике
+            resetAutoplay();
+        }
+
+        function startAutoplay() {
+            // ✏️ МЕНЯЙ ЗДЕСЬ: 4000 = 4 секунды между слайдами
+            slideshowInterval = setInterval(nextSlide, 4000);
+        }
+
+        function resetAutoplay() {
+            clearInterval(slideshowInterval);
+            startAutoplay();
+        }
+
+        // Запуск
+        if (slides.length > 0) {
+            showSlide(slideIndex);
+            startAutoplay();
+        }
+    </script>
+</body>
+</html>
