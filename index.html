@@ -906,6 +906,47 @@
         </h2>
     </section>
 
+    <!-- ========================= -->
+    <!-- МУЗЫКАЛЬНЫЙ КОНТРОЛЛЕР    -->
+    <!-- ========================= -->
+
+    <!-- Сам аудиофайл (зацикленный) -->
+    <audio id="backgroundMusic" loop preload="auto">
+        <source src="media/song.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Плавающий контроллер -->
+    <div class="music-player" id="musicPlayer">
+        <button class="music-toggle" id="musicToggle" title="Включить музыку">
+            <svg class="music-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 18V5l12-2v13"></path>
+                <circle cx="6" cy="18" r="3"></circle>
+                <circle cx="18" cy="16" r="3"></circle>
+            </svg>
+            <span class="pulse-ring"></span>
+        </button>
+        
+        <div class="music-info">
+            <span class="song-title">
+                <!-- ✏️ МЕНЯЙ ЗДЕСЬ: название песни -->
+                Наша песня 💕
+            </span>
+            <span class="music-status">нажми, чтобы включить</span>
+        </div>
+    </div>
+
+    <!-- Приветствие при первом входе -->
+    <div class="music-welcome" id="musicWelcome">
+        <div class="welcome-content">
+            <div class="welcome-heart">💖</div>
+            <h2>Для моей любимой</h2>
+            <p>Включи звук, чтобы почувствовать больше</p>
+            <button class="welcome-btn" id="welcomeBtn">
+                Включить музыку и начать ✨
+            </button>
+        </div>
+    </div>
+    
     <!-- Скрипты -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
@@ -1007,7 +1048,7 @@
             setTimeout(() => heart.remove(), 1000);
         });
 
-                // ================================
+        // ================================
         // СЛАЙДШОУ — автопереключение
         // ================================
         let slideIndex = 0;
@@ -1057,132 +1098,94 @@
         // ================================
         // МУЗЫКАЛЬНЫЙ КОНТРОЛЛЕР
         // ================================
-        const audio = document.getElementById('backgroundMusic');
-        const musicPlayer = document.getElementById('musicPlayer');
-        const musicToggle = document.getElementById('musicToggle');
-        const musicWelcome = document.getElementById('musicWelcome');
-        const welcomeBtn = document.getElementById('welcomeBtn');
-        const statusText = document.querySelector('.music-status');
 
-        let isPlaying = false;
+        // Ждём полной загрузки DOM
+        document.addEventListener('DOMContentLoaded', () => {
+            const audio = document.getElementById('backgroundMusic');
+            const musicPlayer = document.getElementById('musicPlayer');
+            const musicToggle = document.getElementById('musicToggle');
+            const musicWelcome = document.getElementById('musicWelcome');
+            const welcomeBtn = document.getElementById('welcomeBtn');
+            const statusText = document.querySelector('.music-status');
 
-        // Громкость по умолчанию (чтобы не оглушить)
-        audio.volume = 0.4; // ✏️ МЕНЯЙ ЗДЕСЬ: от 0.0 до 1.0 (0.4 = 40%)
-
-        // Показать контроллер с задержкой
-        setTimeout(() => {
-            musicPlayer.classList.add('show');
-        }, 1500);
-
-        // Функция запуска музыки
-        function playMusic() {
-            audio.play()
-                .then(() => {
-                    isPlaying = true;
-                    musicToggle.classList.add('playing');
-                    statusText.textContent = 'играет ♪';
-                })
-                .catch(err => {
-                    console.log('Автовоспроизведение заблокировано:', err);
-                    statusText.textContent = 'нажми, чтобы включить';
-                });
-        }
-
-        // Функция паузы
-        function pauseMusic() {
-            audio.pause();
-            isPlaying = false;
-            musicToggle.classList.remove('playing');
-            statusText.textContent = 'пауза';
-        }
-
-        // Переключение по клику на кнопку
-        musicToggle.addEventListener('click', () => {
-            if (isPlaying) {
-                pauseMusic();
-            } else {
-                playMusic();
+            // Проверка, что все элементы найдены
+            if (!audio || !musicPlayer || !musicToggle || !musicWelcome || !welcomeBtn) {
+                console.error('Не найдены элементы для музыкального контроллера');
+                return;
             }
-        });
 
-        // Приветственное окно — запуск по клику
-        welcomeBtn.addEventListener('click', () => {
-            musicWelcome.classList.add('hide');
-            // Убираем из DOM после анимации
+            let isPlaying = false;
+
+            // Громкость по умолчанию
+            audio.volume = 0.4; // ✏️ МЕНЯЙ ЗДЕСЬ: от 0.0 до 1.0
+
+            // Показать контроллер с задержкой
             setTimeout(() => {
-                musicWelcome.style.display = 'none';
-            }, 800);
-            // Запускаем музыку
-            playMusic();
-        });
+                musicPlayer.classList.add('show');
+            }, 1500);
 
-        // Попытка автозапуска (работает не во всех браузерах)
-        window.addEventListener('load', () => {
-            // Браузеры блокируют автозапуск со звуком, поэтому используем приветствие
-            // Музыка запустится только после клика на "Включить музыку"
-        });
-
-        // Плавное затухание при уходе со страницы
-        window.addEventListener('beforeunload', () => {
-            audio.pause();
-        });
-
-        // Скрываем контроллер на мобильных при скролле вниз
-        let lastScroll = 0;
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-            if (window.innerWidth <= 768) {
-                if (currentScroll > lastScroll && currentScroll > 200) {
-                    musicPlayer.style.opacity = '0.3';
-                } else {
-                    musicPlayer.style.opacity = '1';
-                }
+            // Функция запуска музыки
+            function playMusic() {
+                audio.play()
+                    .then(() => {
+                        isPlaying = true;
+                        musicToggle.classList.add('playing');
+                        if (statusText) statusText.textContent = 'играет ♪';
+                    })
+                    .catch(err => {
+                        console.log('Автовоспроизведение заблокировано:', err);
+                        if (statusText) statusText.textContent = 'нажми, чтобы включить';
+                    });
             }
-            lastScroll = currentScroll;
+
+            // Функция паузы
+            function pauseMusic() {
+                audio.pause();
+                isPlaying = false;
+                musicToggle.classList.remove('playing');
+                if (statusText) statusText.textContent = 'пауза';
+            }
+
+            // Переключение по клику на кнопку
+            musicToggle.addEventListener('click', () => {
+                if (isPlaying) {
+                    pauseMusic();
+                } else {
+                    playMusic();
+                }
+            });
+
+            // Приветственное окно — запуск по клику
+            welcomeBtn.addEventListener('click', () => {
+                musicWelcome.classList.add('hide');
+                setTimeout(() => {
+                    musicWelcome.style.display = 'none';
+                }, 800);
+                playMusic();
+            });
+
+            // Плавное затухание при уходе со страницы
+            window.addEventListener('beforeunload', () => {
+                audio.pause();
+            });
+
+            // Скрываем контроллер на мобильных при скролле вниз
+            let lastScroll = 0;
+            window.addEventListener('scroll', () => {
+                const currentScroll = window.pageYOffset;
+                if (window.innerWidth <= 768) {
+                    if (currentScroll > lastScroll && currentScroll > 200) {
+                        musicPlayer.style.opacity = '0.3';
+                    } else {
+                        musicPlayer.style.opacity = '1';
+                    }
+                }
+                lastScroll = currentScroll;
+            });
         });
 
     </script>
 
-    <!-- ========================= -->
-    <!-- МУЗЫКАЛЬНЫЙ КОНТРОЛЛЕР    -->
-    <!-- ========================= -->
-
-    <!-- Сам аудиофайл (зацикленный) -->
-    <!-- ✏️ МЕНЯЙ ЗДЕСЬ: путь к песне -->
-    <audio id="backgroundMusic" loop preload="auto">
-        <source src="media/song.mp3" type="audio/mpeg">
-    </audio>
-
-    <!-- Плавающий контроллер -->
-    <div class="music-player" id="musicPlayer">
-        <button class="music-toggle" id="musicToggle" title="Включить музыку">
-            <svg class="music-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M9 18V5l12-2v13"></path>
-                <circle cx="6" cy="18" r="3"></circle>
-                <circle cx="18" cy="16" r="3"></circle>
-            </svg>
-            <span class="pulse-ring"></span>
-        </button>
-        
-        <div class="music-info">
-            <span class="song-title">
-                <!-- ✏️ МЕНЯЙ ЗДЕСЬ: название песни -->
-                Наша песня 💕
-            </span>
-            <span class="music-status">нажми, чтобы включить</span>
-        </div>
-    </div>
-
-    <!-- Приветствие при первом входе -->
-    <div class="music-welcome" id="musicWelcome">
-        <div class="welcome-content">
-            <div class="welcome-heart">💖</div>
-            <h2>Для моей любимой</h2>
-            <p>Включи звук, чтобы почувствовать больше</p>
-            <button class="welcome-btn" id="welcomeBtn">
-                Включить музыку и начать ✨
-            </button>
-        </div>
-    </div>
+    
 </body>
 </html>
