@@ -590,9 +590,32 @@
             opacity: 0.8;
         }
 
+        /* Приветственное окно */
+        .music-welcome {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(26, 10, 31, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+            transition: opacity 0.8s ease;
+        }
+
         .music-welcome.hide {
             opacity: 0;
             pointer-events: none;
+        }
+
+        .welcome-content {
+            text-align: center;
+            max-width: 400px;
+            padding: 40px;
         }
 
         .welcome-heart {
@@ -654,57 +677,108 @@
             }
         }
 
+        /* ========================= */
+        /* ИСПРАВЛЕНИЕ МОБИЛЬНОГО СКРОЛЛА */
+        /* ========================= */
 
-        /* 📱 Фикс для приветственного экрана (не съезжает на мобильных) */
+        /* Запрещаем горизонтальный скролл на всём документе */
+        html, body {
+            overflow-x: hidden !important;
+            max-width: 100vw !important;
+            width: 100% !important;
+            position: relative;
+        }
+
+        /* Исправляем приветственный экран */
         .music-welcome {
-            position: fixed;
-            top: 0;
+            width: 100vw;
+            height: 100vh;
             left: 0;
-            width: 100%;
-            height: 100%;
-            height: 100dvh; /* Учитывает панели мобильных браузеров */
-            background: rgba(26, 10, 31, 0.97);
-            -webkit-backdrop-filter: blur(20px);
-            backdrop-filter: blur(20px);
-            z-index: 10000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.8s ease;
+            right: 0;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
             overflow: hidden;
         }
 
-        /* 📌 Блокируем скролл фона, пока открыто приветствие */
-        body.welcome-open {
-            overflow: hidden;
-            height: 100%;
-        }
-
-        /* ✅ Убираем лишний отступ у контента */
         .welcome-content {
-            padding: 30px 20px;
-            max-width: 90%;
-            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
-        /* 🎵 Мобильная адаптация плеера */
+        /* Исправляем музыкальный контроллер */
+        .music-player {
+            max-width: calc(100vw - 40px);
+            box-sizing: border-box;
+        }
+
+        /* Исправляем все секции */
+        section {
+            width: 100%;
+            max-width: 100vw;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+
+        /* Исправляем story-block на мобильных */
         @media (max-width: 768px) {
-            .music-player {
-                bottom: 20px;
-                right: 20px;
-                padding: 8px 12px 8px 8px;
+            .story-block,
+            .story-block.reverse {
+                width: 100%;
+                max-width: 100%;
+                padding: 0 15px;
+                box-sizing: border-box;
             }
-            .music-toggle {
-                width: 44px;
-                height: 44px;
+            
+            .story-image {
+                width: 100%;
+                max-width: 100%;
             }
-            .song-title {
-                font-size: 0.8rem;
-                max-width: 120px;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
+            
+            .story-text {
+                width: 100%;
+                padding: 0 5px;
+                box-sizing: border-box;
             }
+            
+            /* Исправляем слайдшоу */
+            .slideshow-container {
+                width: 100%;
+                max-width: 100%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            /* Исправляем таймер */
+            .countdown {
+                width: 100%;
+                padding: 0 10px;
+                box-sizing: border-box;
+            }
+            
+            .count-item {
+                min-width: 70px;
+                padding: 15px 10px;
+            }
+        }
+
+        /* Гарантируем, что звёзды не выходят за границы */
+        .stars {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .star {
+            max-width: 100vw;
+        }
+
+        /* Исправляем падающие сердечки */
+        .falling-heart {
+            max-width: 100vw;
         }
     </style>
 </head>
